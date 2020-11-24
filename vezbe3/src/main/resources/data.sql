@@ -1,0 +1,1 @@
+INSERT INTO COUNTER (id, number) VALUES (0, 0)
