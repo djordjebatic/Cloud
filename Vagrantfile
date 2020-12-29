@@ -13,7 +13,14 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "hashicorp/bionic64"
-  config.vm.provision :shell, path: "bootstrap.sh"
+  
+  
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
+
+  config.vm.provision "file", source: "API", destination: "API"
+  config.vm.provision "file", source: "API/docker-compose.yml", destination: "API/docker-compose.yml"
+  
+  config.vm.provision :shell, path: "run.sh"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
