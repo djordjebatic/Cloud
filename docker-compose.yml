@@ -31,7 +31,7 @@ services:
             - ./env_variables/postgres.env
             
     cloud1:
-        image: cloud:latest
+        image: 'batisque/cloud:latest'
         container_name: cloud1
         build:
             context: ./API
