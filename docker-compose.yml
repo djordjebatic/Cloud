@@ -66,19 +66,23 @@ services:
         links:
             - postgres2
       
-    nginx1:
-        build: ./nginx
-        container_name: nginx1
-        ports:
-            - "81:80"
-        networks:
-            - cloud-network
-        depends_on: 
-            - cloud1
+#    nginx1:
+#        container_name: nginx1
+#        build:
+#            context: ./nginx
+#            dockerfile: Dockerfile
+#        ports:
+#            - "81:80"
+#        networks:
+#            - cloud-network
+#        depends_on: 
+#            - cloud1
             
     nginx2:
-        build: ./nginx/load_balancer
         container_name: nginx2
+        build:
+            context: ./nginx/load_balancer
+            dockerfile: Dockerfile
         ports:
             - "82:80"
         networks:
@@ -89,7 +93,6 @@ services:
 
 networks:
     cloud-network:
-        driver: bridge
 
 volumes:
     pgdata1:
