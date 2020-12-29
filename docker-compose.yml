@@ -1,0 +1,96 @@
+version: "3"
+services:
+    postgres1:
+        image: postgres:latest
+        container_name: postgres1
+        volumes:
+            - pgdata1:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_DB=cloud
+        restart: always
+        networks:
+            - cloud-network
+        env_file:
+            - ./env_variables/postgres.env
+
+    postgres2:
+        image: postgres:latest
+        container_name: postgres2
+        volumes:
+            - pgdata2:/var/lib/postgresql/data
+        ports:
+            - 5434:5432
+        environment:
+            - POSTGRES_DB=cloud
+        restart: always
+        networks:
+            - cloud-network
+        env_file:
+            - ./env_variables/postgres.env
+            
+    cloud1:
+        image: cloud:latest
+        container_name: cloud1
+        build:
+            context: ./API
+            dockerfile: Dockerfile
+        ports:
+            - 8080:8080
+        restart: always
+        volumes:
+            - /var/tmp
+        networks:
+            - cloud-network
+        env_file:
+            - ./env_variables/app1.env
+        links:
+            - postgres1
+            
+    cloud2:
+        image: cloud:latest
+        container_name: cloud2
+        build:
+            context: ./API
+            dockerfile: Dockerfile
+        ports:
+            - 8081:8080
+        restart: always
+        volumes:
+            - /var/tmp
+        networks:
+            - cloud-network
+        env_file:
+            - ./env_variables/app2.env
+        links:
+            - postgres2
+      
+    nginx1:
+        build: ./nginx
+        container_name: nginx1
+        ports:
+            - "81:80"
+        networks:
+            - cloud-network
+        depends_on: 
+            - cloud1
+            
+    nginx2:
+        build: ./nginx/load_balancer
+        container_name: nginx2
+        ports:
+            - "82:80"
+        networks:
+            - cloud-network
+        depends_on: 
+            - cloud1
+            - cloud2
+
+networks:
+    cloud-network:
+        driver: bridge
+
+volumes:
+    pgdata1:
+    pgdata2:
