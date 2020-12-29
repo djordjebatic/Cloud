@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.cloud.model.Counter;
 import project.cloud.service.CounterService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -15,8 +19,12 @@ public class Test {
     CounterService counterService;
 
     @RequestMapping(method = GET, value = "/")
-    public int getCount(){
+    public ResponseEntity getCount(){
         Counter c = counterService.incrementCounter();
-        return c.getNumber();
+        Map<String, Object> ret = new HashMap<String,Object>();
+        ret.put("counter", c);
+        ret.put("host", System.getenv("HOST"));
+
+        return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 }

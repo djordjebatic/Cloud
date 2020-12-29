@@ -16,9 +16,10 @@ Vagrant.configure("2") do |config|
   
   
   config.vm.network "forwarded_port", guest: 8080, host: 8080
-
+  config.vm.provision "file", source: "nginx", destination: "nginx"
+  config.vm.provision "file", source: "env_variables", destination: "env_variables"
   config.vm.provision "file", source: "API", destination: "API"
-  config.vm.provision "file", source: "API/docker-compose.yml", destination: "API/docker-compose.yml"
+  config.vm.provision "file", source: "docker-compose.yml", destination: "docker-compose.yml"
   
   config.vm.provision :shell, path: "run.sh"
 
