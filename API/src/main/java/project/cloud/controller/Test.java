@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.cloud.model.Counter;
 import project.cloud.service.CounterService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.*; 
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -19,12 +17,9 @@ public class Test {
     CounterService counterService;
 
     @RequestMapping(method = GET, value = "/")
-    public ResponseEntity getCount(){
+    public String getCount(){
         Counter c = counterService.incrementCounter();
-        Map<String, Object> ret = new HashMap<String,Object>();
-        ret.put("counter", c);
-        ret.put("host", System.getenv("HOST"));
 
-        return new ResponseEntity<>(ret, HttpStatus.OK);
+        return "Host: " + System.getenv("HOST") + " | " + "Counter: " + Integer.toString(c.getNumber());
     }
 }
