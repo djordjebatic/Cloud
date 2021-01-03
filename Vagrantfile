@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/bionic64"
   
   
-  config.vm.network "forwarded_port", guest: 8080, host: 8080
+  config.vm.network "forwarded_port", guest: 82, host: 8080
   config.vm.provision "file", source: "nginx", destination: "nginx"
   config.vm.provision "file", source: "env_variables", destination: "env_variables"
   config.vm.provision "file", source: "API", destination: "API"
